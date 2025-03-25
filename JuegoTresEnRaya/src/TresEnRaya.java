@@ -5,11 +5,14 @@ public class TresEnRaya {
     private Jugador[] jugadores;
     private Turno turno;
 
+    private final char[] FICHAS = {'X','O'};
+    private final int NUMERO_RAYA = 3;
+
     public TresEnRaya(){
-        tablero = new Tablero(3);
+        tablero = new Tablero(3,FICHAS);
         jugadores = new Jugador[2];
-        jugadores[0] = new Jugador('X',3);
-        jugadores[1] = new Jugador('O',3);
+        jugadores[0] = new Jugador(1,3);
+        jugadores[1] = new Jugador(2,3);
     }
 
     public void jugar() {
@@ -17,7 +20,36 @@ public class TresEnRaya {
             tablero.mostrar();
             jugadores[turno.leToca()].teToca(tablero);
             turno.cambiar();
-        } while (!tablero.hayFichasEnRaya());
+        } while (!hayVictoria());
         jugadores[turno.noLeToca()].celebrar();
+    }
+
+    private boolean hayVictoria() {
+        Coordenada coordenadaJugada = jugadores[turno.noLeToca()].coordenadaJugada;
+        int[][] combinaciones ={
+            tablero.obtenerFila(coordenadaJugada),
+            tablero.obtenerColumna(coordenadaJugada),
+            tablero.obtenerDiagonal1(coordenadaJugada),
+            tablero.obtenerDiagonal2(coordenadaJugada),
+        };
+
+        for (int[] combinacion : combinaciones) {
+            if (comprobarRaya(combinacion)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean comprobarRaya(int[] fila) {
+        int valorAnterior = fila[0];
+        int igualesSeguidos = 1;
+        for (int i = 1; i < fila.length; i++) {
+            igualesSeguidos = (fila[i] != 0 && fila[i] == valorAnterior) ? igualesSeguidos + 1 : 1;
+            valorAnterior = fila[i];
+    
+            if (igualesSeguidos >= NUMERO_RAYA) return true;
+        }
+        return false;
     }
 }

@@ -11,7 +11,7 @@ public class Jugador {
     }
 
     private void ponerFicha(Tablero tablero) {
-        Coordenada coordenada = pedirCoordenadaValida(tablero, "Dame una coordenada válida donde colocar la ficha (Primero X y después Y):");
+        Coordenada coordenada = pedirCoordenadaValida(tablero,false ,"Dame una coordenada válida donde colocar la ficha (Primero X y después Y):");
 
         tablero.ponerFicha(coordenada,jugador);
         coordenadaJugada = coordenada;
@@ -20,27 +20,26 @@ public class Jugador {
     }
 
     private void moverFicha(Tablero tablero) {
-        Coordenada origen = pedirCoordenadaValida(tablero, "Dame una coordenada válida donde sacar una ficha (Primero X y después Y):");
-        Coordenada latter = pedirCoordenadaValida(tablero, "Dame una coordenada válida donde colocar la ficha (Primero X y después Y):");
+        Coordenada origen = pedirCoordenadaValida(tablero,true ,"Dame una coordenada válida donde sacar una ficha (Primero X y después Y):");
+        Coordenada latter = pedirCoordenadaValida(tablero,false ,"Dame una coordenada válida donde colocar la ficha (Primero X y después Y):");
     
         tablero.moverFicha(origen, latter, jugador);
         coordenadaJugada = latter;
     }
     
-    private Coordenada pedirCoordenadaValida(Tablero tablero, String mensaje) {
+    private Coordenada pedirCoordenadaValida(Tablero tablero,boolean debeEstarOcupado ,String mensaje) {
         Coordenada coordenada;
         do {
             System.out.println(mensaje);
-            coordenada = new Coordenada();
+            coordenada = new Coordenada(tablero.tamaño());
             coordenada.pedir();
-        } while (!coordenada.esValida() || !tablero.estaOcupado(coordenada));
+        } while (!(tablero.estaOcupado(coordenada) == debeEstarOcupado));
         return coordenada;
     }
 
     public void teToca(Tablero tablero) {
         if (fichasPorColocar > 0) {
             ponerFicha(tablero);
-            fichasPorColocar--;
         } else {
             moverFicha(tablero);
         }

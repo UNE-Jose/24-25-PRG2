@@ -1,20 +1,27 @@
 package JuegoTresEnRaya.src;
 
 public class Turno {
+    private int turnoActual;
+    private int numeroJugadores;
+
+    public Turno(boolean comienzoAzar,int jugadores) {
+        numeroJugadores = jugadores;
+        turnoActual = comienzoAzar ? ((int) (Math.random()*numeroJugadores)) : 0;
+    }
 
     public int leToca() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'leToca'");
+        return turnoActual;
     }
 
     public void cambiar() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'cambiar'");
+        turnoActual = siguienteJugador();
     }
 
-    public int noLeToca() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'noLeToca'");
+    public int siguienteJugador() {
+        return (turnoActual+1)%numeroJugadores;
     }
 
+    public int jugadorAnterior() {
+        return (turnoActual-1+numeroJugadores)%numeroJugadores;
+    }
 }

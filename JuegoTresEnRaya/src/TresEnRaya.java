@@ -13,6 +13,7 @@ public class TresEnRaya {
         jugadores = new Jugador[2];
         jugadores[0] = new Jugador(1,3);
         jugadores[1] = new Jugador(2,3);
+        turno = new Turno(true,jugadores.length);
     }
 
     public void jugar() {
@@ -21,11 +22,11 @@ public class TresEnRaya {
             jugadores[turno.leToca()].teToca(tablero);
             turno.cambiar();
         } while (!hayVictoria());
-        jugadores[turno.noLeToca()].celebrar();
+        jugadores[turno.jugadorAnterior()].celebrar();
     }
 
     private boolean hayVictoria() {
-        Coordenada coordenadaJugada = jugadores[turno.noLeToca()].coordenadaJugada;
+        Coordenada coordenadaJugada = jugadores[turno.jugadorAnterior()].coordenadaJugada;
         int[][] combinaciones ={
             tablero.obtenerFila(coordenadaJugada),
             tablero.obtenerColumna(coordenadaJugada),

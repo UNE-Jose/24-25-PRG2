@@ -20,6 +20,10 @@ public class Tablero {
         this(cuadradoLado, cuadradoLado,fichas);
     }
 
+    public int[] tamaño() {
+        return new int[] {tabla[0].length, tabla.length};
+    }
+
     public void mostrar() {
         for (int i = 0;i<tabla.length;i++) {
             for (int j = 0; j<tabla.length;j++) {
@@ -34,16 +38,16 @@ public class Tablero {
     }
 
     public boolean estaOcupado(Coordenada coordenada) {
-        return tabla[coordenada.y][coordenada.x] != VACIO;
+        return tabla[coordenada.y()][coordenada.x()] != VACIO;
     }
 
     public void ponerFicha(Coordenada coordenada, int ficha) {
-        tabla[coordenada.y][coordenada.x] = ficha;
+        tabla[coordenada.y()][coordenada.x()] = ficha;
     }
 
     public int sacarFicha(Coordenada coordenada) {
-        int fichaSacada = tabla[coordenada.y][coordenada.x];
-        tabla[coordenada.y][coordenada.x] = VACIO;
+        int fichaSacada = tabla[coordenada.y()][coordenada.x()];
+        tabla[coordenada.y()][coordenada.x()] = VACIO;
         return fichaSacada;
     }
 
@@ -52,24 +56,38 @@ public class Tablero {
     }
 
     public int[] obtenerFila(Coordenada coordenada) {
-        return tabla[coordenada.y];
+        return tabla[coordenada.y()];
     }
 
     public int[] obtenerColumna(Coordenada coordenada) {
         int[] columna = new int[tabla.length];
         for (int i = 0; i < columna.length; i++) {
-            columna[i] = tabla[i][coordenada.x];
+            columna[i] = tabla[i][coordenada.x()];
         }
         return columna;
     }
 
     public int[] obtenerDiagonal1(Coordenada coordenada) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'obtenerDiagonal1'");
+        int inicioX = coordenada.x() >= coordenada.y() ? coordenada.x() - coordenada.y() : 0;
+        int inicioY = coordenada.y() > coordenada.x() ? coordenada.y() - coordenada.x() : 0;
+        int[] diagonal = new int[Math.min(tabla.length - inicioY, tabla[0].length - inicioX)];
+    
+        for (int i = 0; i < diagonal.length; i++) {
+            diagonal[i] = tabla[inicioY + i][inicioX + i];
+        }
+    
+        return diagonal;
     }
 
     public int[] obtenerDiagonal2(Coordenada coordenada) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'obtenerDiagonal2'");
+        int suma = coordenada.x() + coordenada.y();
+        int inicioX = suma < tabla[0].length ? suma : tabla[0].length - 1;
+        int inicioY = suma < tabla[0].length ? 0 : suma - (tabla[0].length - 1);
+        int[] diagonal = new int[Math.min(inicioX + 1, tabla.length - inicioY)];
+    
+        for (int i = 0; i < diagonal.length; i++) {
+            diagonal[i] = tabla[inicioY + i][inicioX - i];
+        }
+        return diagonal;
     }
 }
